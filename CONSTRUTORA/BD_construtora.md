@@ -1,4 +1,13 @@
-# 1. DATABASE CONSTRUTORA:
+# EXERCICIO MySQL
+Em nosso sistema de controle de projetos são armazenados instrumentos, departamentos, usuários e os projetos da empresa. Cada usuário pode participar de vários projetos e cada projeto pode usufruir de vários instrumentos. O sistema precisa, agora, incluir veículos. Cada veículo poderá ser reaproveitado em vários projetos. Esses veículos precisam estar sob a supervisão de um responsável da empresa. 
+
+
+Realizar a Modelagem de Dados:
+Conceitual (Brainstorms)
+Lógico (Diagrama ER)
+Físico (Criando os scripts no Banco de Dados)
+
+## DATABASE CONSTRUTORA:
 
 ```sql
 CREATE DATABASE construtora
@@ -22,11 +31,11 @@ CREATE TABLE usuarios (
     id_usuarios INT AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     id_departamentos INT,
-    FOREIGN KEY (id_departamentos) REFERENCES departamentos(id_departamentos)
+    ADD CONSTRAINT FK_USUARIOS_DEPARTAMENTOS FOREIGN KEY (id_departamentos) REFERENCES departamentos(id_departamentos)
 );
 ```
 
-## TABELA RESPONSAVEIS
+<!-- ## TABELA RESPONSAVEIS
 
 ```sql
 CREATE TABLE responsaveis (
@@ -34,8 +43,8 @@ CREATE TABLE responsaveis (
     nome VARCHAR(100) NOT NULL,
     id_departamentos INT,
     FOREIGN KEY (id_departamentos) REFERENCES departamentos(id_departamentos)
-);
-```
+); -->
+<!-- ``` -->
 
 ## TABELA VEICULOS
 
@@ -44,8 +53,8 @@ CREATE TABLE veiculos (
     id_veiculos INT AUTO_INCREMENT PRIMARY KEY,
     placa VARCHAR(20) NOT NULL,
     modelo VARCHAR(100) NOT NULL,
-    id_responsaveis INT,
-    FOREIGN KEY (id_responsaveis) REFERENCES responsaveis(id_responsaveis)
+    id_usuarios INT,
+    ADD CONSTRAINT FK_VEICULOS_USUARIOS FOREIGN KEY (id_usuarios) REFERENCES usuarios(id_usuarios)
 );
 ```
 
@@ -55,7 +64,7 @@ CREATE TABLE veiculos (
 CREATE TABLE equipes (
     id_equipes INT AUTO_INCREMENT PRIMARY KEY,
     id_usuarios INT,
-    FOREIGN KEY (id_usuarios) REFERENCES usuarios(id_usuarios)
+    ADD CONSTRAINT FK_EQUIPES_USUARIOS FOREIGN KEY (id_usuarios) REFERENCES usuarios(id_usuarios)
 );
 ```
 
@@ -74,7 +83,7 @@ CREATE TABLE ferramentas (
 CREATE TABLE kits (
     id_kits INT AUTO_INCREMENT PRIMARY KEY,
     id_ferramentas INT,
-    FOREIGN KEY (id_ferramentas) REFERENCES ferramentas(id_ferramentas)
+    ADD CONSTRAINT FK_KITS_FERRAMENTAS FOREIGN KEY (id_ferramentas) REFERENCES ferramentas(id_ferramentas)
 );
 ```
 
@@ -86,10 +95,9 @@ CREATE TABLE projetos (
     id_kits INT,
     id_veiculos INT,
     id_equipes INT,
-    id_responsaveis INT,
-    FOREIGN KEY (id_veiculos) REFERENCES veiculos(id_veiculos),
-    FOREIGN KEY (id_equipes) REFERENCES equipes(id_equipes),
-    FOREIGN KEY (id_responsaveis) REFERENCES responsaveis(id_responsaveis),
-    FOREIGN KEY (id_kits) REFERENCES kits(id_kits)
+    ADD CONSTRAINT FK_PROJETOS_VEICULOS FOREIGN KEY (id_veiculos) REFERENCES veiculos(id_veiculos),
+    ADD CONSTRAINT FK_PROJETOS_EQUIPES FOREIGN KEY (id_equipes) REFERENCES equipes(id_equipes),
+    ADD CONSTRAINT FK_PROJETOS_RESPONSAVEIS FOREIGN KEY (id_responsaveis) REFERENCES responsaveis(id_responsaveis),
+    ADD CONSTRAINT FK_PROJETOS_KITS FOREIGN KEY (id_kits) REFERENCES kits(id_kits)
 );
 ```
